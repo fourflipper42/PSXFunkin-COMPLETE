@@ -9,6 +9,13 @@ out/
 *.map
 *.elf
 
+# Generated/fetched source trees
+upstream/
+official-v084/
+official-assets/
+psx-week-reference/
+.deps/
+
 # Python
 __pycache__/
 *.py[cod]

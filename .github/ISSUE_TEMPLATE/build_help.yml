@@ -1,0 +1,39 @@
+name: Compiling Help
+description: The build decided it hates you today.
+title: "[BUILD] "
+body:
+  - type: checkboxes
+    id: guide
+    attributes:
+      label: Before posting
+      options:
+        - label: I read docs/COMPILING.md and ran ./check.sh.
+          required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: Bazzite, Fedora, Ubuntu, etc.
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Commit
+      placeholder: 1234abcd
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command you ran
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Full useful error output
+      render: text
+    validations:
+      required: true

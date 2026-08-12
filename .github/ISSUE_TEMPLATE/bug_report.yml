@@ -1,0 +1,50 @@
+name: Bug Report
+description: Something in the port is busted.
+title: "[BUG] "
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for reporting it. Please give us enough info to actually reproduce the thing."
+  - type: input
+    id: commit
+    attributes:
+      label: Commit
+      description: The PSXFunkin COMPLETE commit you tested.
+      placeholder: 1234abcd
+    validations:
+      required: true
+  - type: dropdown
+    id: target
+    attributes:
+      label: Where did it happen?
+      options:
+        - Real PlayStation hardware
+        - DuckStation
+        - Another emulator
+        - Build scripts / tooling
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Boot the game\n2. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happens?
+    validations:
+      required: true
+  - type: textarea
+    id: extras
+    attributes:
+      label: Logs / screenshots / recordings
+      description: Error codes and short recordings are extremely useful.
