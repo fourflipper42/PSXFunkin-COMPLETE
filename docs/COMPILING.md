@@ -6,16 +6,23 @@ This thing has a lot of moving parts. The helper scripts exist so you don't have
 
 You need **Podman** or **Docker** on the host. Bazzite already ships with Podman, so this is also the least annoying Bazzite setup.
 
-From the repo root:
+The repo does **not** redistribute PsyQ. Put a compatible converted PsyQ archive you are legally allowed to use in the ignored `.deps/` directory first:
 
 ```bash
-./dev.sh setup --fetch-psyq
+mkdir -p .deps
+cp /path/to/psyq-4_7-converted-light.zip .deps/psyq.zip
+```
+
+Then:
+
+```bash
+./dev.sh setup --psyq-zip .deps/psyq.zip
 ./dev.sh build
 ```
 
 The first setup takes a while. It downloads the pinned PSXFunkin source, the exact v0.8.4 Funkin asset revision, the official v0.8.4 Linux build used for a few bundled sources, the base-week conversion reference, `psxavenc`, and `mkpsxiso`.
 
-The finished disc should end up at:
+The finished local disc should end up at:
 
 ```text
 out/PSXFunkin-COMPLETE-WIP.bin
@@ -27,26 +34,6 @@ Then run:
 ```bash
 ./play.sh
 ```
-
-# PsyQ
-
-PSXFunkin still builds against a converted PsyQ compatibility tree.
-
-The SDK is **not stored in this repository**.
-
-You have two setup options:
-
-```bash
-./dev.sh setup --psyq-zip /path/to/psyq-4_7-converted-light.zip
-```
-
-or use the same legacy mirror route used by the existing PSXFunkin build setup:
-
-```bash
-./dev.sh setup --fetch-psyq
-```
-
-If you already have compatible `include/` and `lib/` directories, put them at `.deps/psyq/include` and `.deps/psyq/lib`.
 
 # Native Linux Build
 
@@ -68,13 +55,13 @@ On Ubuntu/Debian, the dev container installs the known-good package set for you.
 Then:
 
 ```bash
-./setup.sh --fetch-psyq
+./setup.sh --psyq-zip /path/to/psyq-4_7-converted-light.zip
 ./build.sh
 ```
 
 # Rebuilding
 
-`upstream/` is disposable. The build resets it to the pinned PSXFunkin commit before applying the port again, so don't keep hand edits in there.
+`upstream/` is disposable. The build resets it to the pinned baseline before applying the port again, so don't keep hand edits in there.
 
 Change the public build/apply scripts instead and rebuild.
 
@@ -82,18 +69,28 @@ If your fetched dependencies get mangled:
 
 ```bash
 make distclean
-./dev.sh setup --fetch-psyq
+mkdir -p .deps
+cp /path/to/psyq-4_7-converted-light.zip .deps/psyq.zip
+./dev.sh setup --psyq-zip .deps/psyq.zip
 ./dev.sh build
 ```
 
 `distclean` deletes generated/downloaded build trees. It does not touch the tracked source in this repo.
 
-# What Gets Downloaded?
+# What Is Pinned?
 
-The important pins are:
+See `build-lock.env`. That file is the source of truth for the upstream/tool revisions and the official v0.8.4 Linux archive checksum.
 
-- PSXFunkin: `850e0207479d8fb658bdc7637f6bfbc28a2b4066`
-- Funkin v0.8.4 asset tree: `d1d027d4747aaba151c6df121ea736c31d6aed38`
-- Base-week PS1 reference: `b3f4c5ff0f7656af8ed17498de6b6d7b7a8d967e`
+The important inputs currently include:
 
-Keeping these pinned matters. Building against random newer assets/source will eventually produce extremely stupid bugs.
+- PSXFunkin
+- Funkin v0.8.4 assets
+- base-week PS1 reference
+- psxavenc
+- mkpsxiso
+
+Building against random newer source/assets/tools is a good way to invent bugs nobody else can reproduce.
+
+# Windows
+
+Use [WINDOWS.md](WINDOWS.md). WSL2 + Docker Desktop is the supported sane route.

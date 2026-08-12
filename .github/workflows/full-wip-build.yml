@@ -1,0 +1,56 @@
+name: Full WIP build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PSYQ_ARCHIVE_URL: ${{ secrets.PSYQ_ARCHIVE_URL }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Check source first
+        run: ./check.sh
+
+      - name: Require private PsyQ source
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${PSYQ_ARCHIVE_URL:-}" ]]; then
+            echo "PSYQ_ARCHIVE_URL is not configured."
+            echo "Add a repository secret pointing to a compatible PsyQ archive you are allowed to use."
+            exit 1
+          fi
+
+      - name: Fetch private PsyQ archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .deps
+          curl -fL --retry 3 --retry-delay 2 "$PSYQ_ARCHIVE_URL" -o .deps/ci-psyq.zip
+
+      - name: Setup pinned build environment
+        run: ./dev.sh setup --psyq-zip .deps/ci-psyq.zip
+
+      - name: Build current WIP
+        run: ./dev.sh build
+
+      - name: Upload non-game build reports
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: psxfunkin-build-reports-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            out/SHA256SUMS.txt
+            out/BUILD-MANIFEST.txt
+            build/*.json
+
+# Intentionally no BIN/CUE upload here. The public repo does not redistribute
+# Funkin's proprietary game content as a GitHub Actions artifact.

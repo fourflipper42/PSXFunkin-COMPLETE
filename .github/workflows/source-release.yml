@@ -1,0 +1,35 @@
+name: Source release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check source
+        run: ./check.sh
+      - name: Create source-only prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "Release already exists: $GITHUB_REF_NAME"
+            exit 0
+          fi
+          gh release create "$GITHUB_REF_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "PSXFunkin COMPLETE $GITHUB_REF_NAME" \
+            --generate-notes \
+            --prerelease
+
+# GitHub automatically attaches source archives. Do not attach generated
+# game BIN/CUE files here unless redistribution rights are separately cleared.
