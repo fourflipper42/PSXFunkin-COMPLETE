@@ -7,7 +7,8 @@ You can help by fixing bugs, improving the build tools, porting missing behavior
 # Before You Start
 
 - Read the [compiling guide](docs/COMPILING.md).
-- Check the [current status](docs/STATUS.md) so you don't spend three hours fixing something that is already being torn apart.
+- Check the [current status](docs/STATUS.md) and [roadmap](ROADMAP.md) so you don't spend three hours fixing something that is already being torn apart.
+- Read the [asset rules](docs/ASSETS.md) and [third-party notices](THIRD_PARTY_NOTICES.md).
 - Run `./check.sh` before you open a PR.
 - Keep changes focused. One bug/fix/feature per PR is way easier to review.
 
@@ -30,7 +31,7 @@ Read [PORTING.md](docs/PORTING.md) if that sounds weird. It makes more sense onc
 
 **Do not commit downloaded Funkin' assets, music, videos, disc images, or SDK files.**
 
-The setup script fetches/stages the official sources locally. Generated `TIM`, `ARC`, `XA`, `STR`, `BIN`, and `CUE` files stay out of Git too.
+The setup script fetches/stages official sources locally. Generated `TIM`, `ARC`, `XA`, `STR`, `BIN`, and `CUE` files stay out of Git too.
 
 If the official source does not contain an animation/frame we need, do not draw a fake replacement just to make the build pass. Leave the gap obvious and mention it in your PR.
 
@@ -50,6 +51,12 @@ A good PR should say:
 Screenshots or short recordings are extremely useful for visual/runtime changes.
 
 If your change touches CD streaming, XA, STR playback, memory use, VRAM, timing, or controller behavior, please test more than just "it compiled."
+
+# Licensing
+
+This project contains material under different licenses/ownership. Read `LICENSING.md` and `THIRD_PARTY_NOTICES.md` before importing or copying code/assets from somewhere else.
+
+Do not assume a PR can relicense third-party material just because it is being added to this repository.
 
 # Code Comments
 

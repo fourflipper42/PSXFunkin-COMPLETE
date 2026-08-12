@@ -12,18 +12,14 @@ If that passes but setup/build does not, rerun the failing command and keep the 
 
 # "PsyQ compatibility files are missing"
 
-The SDK is not stored in this repo.
+The SDK is not stored or downloaded by this repo.
 
-Use a compatible converted archive:
-
-```bash
-./dev.sh setup --psyq-zip /path/to/psyq-4_7-converted-light.zip
-```
-
-Or use the same fetch route as the existing build setup:
+Put a compatible converted archive you are legally allowed to use in `.deps/` and rerun setup:
 
 ```bash
-./dev.sh setup --fetch-psyq
+mkdir -p .deps
+cp /path/to/psyq-4_7-converted-light.zip .deps/psyq.zip
+./dev.sh setup --psyq-zip .deps/psyq.zip
 ```
 
 # Git LFS Files Look Like Tiny Text Files
@@ -33,7 +29,7 @@ Run:
 ```bash
 git lfs install
 git -C .deps/funkin-assets lfs pull
-./dev.sh setup
+./dev.sh setup --psyq-zip .deps/psyq.zip
 ```
 
 # Setup Got Halfway Through And Died
@@ -44,7 +40,9 @@ If the dependency trees are genuinely cursed:
 
 ```bash
 make distclean
-./dev.sh setup --fetch-psyq
+mkdir -p .deps
+cp /path/to/psyq-4_7-converted-light.zip .deps/psyq.zip
+./dev.sh setup --psyq-zip .deps/psyq.zip
 ```
 
 # Podman Permission / SELinux Weirdness
